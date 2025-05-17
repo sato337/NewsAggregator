@@ -127,17 +127,17 @@ def load_user(user_id):
     return db_sess.get(User, user_id)
 
 
-@app.cli.command("fetch-news")
-def fetch_news_command():
-    aggregator = NewsAggregator()
-    aggregator.fetch_news()
-    print("Новости загружены")
 
 @app.errorhandler(500)
 def internal_error(error):
     return render_template("500.html"), 500
 
-
+@app.route('/refresh-news')
+def refresh_news():
+    aggregator = NewsAggregator()
+    aggregator.fetch_news()
+    flash('Новости обновлены', 'success')
+    return redirect('/')
 
 
 if __name__ == '__main__':
