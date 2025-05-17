@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4">
+    <i class="bi-bookmark-heart"></i> Сохранённые статьи
+</h2>
+
+{% if saved %}
+<div class="row row-cols-1 row-cols-md-2 g-4">
+    {% for item in saved %}
+    <div class="col">
+        <div class="card h-100 shadow">
+            <div class="card-body">
+                <h5 class="card-title">{{ item.title }}</h5>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <small class="text-muted">
+                        <i class="bi-{{ 'newspaper' if item.source == 'NewsAPI' else 'globe' }}"></i>
+                        {{ item.source }}
+                    </small>
+                    <a href="/unsave/{{ item.id }}"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Удалить из сохранённых?')">
+                       <i class="bi-trash"></i>
+                    </a>
+                </div>
+                <p class="card-text">{{ item.content|truncate(200) }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info">
+    <i class="bi-info-circle"></i> Вы пока не сохранили ни одной статьи
+</div>
+{% endif %}
+{% endblock %}
