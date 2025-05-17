@@ -1,1 +1,1 @@
-SECRET_KEY = 'ваш_ключ_здесьlvFqzaXsQy76x-KruxGSkiXNs305PUMc00e7ZPnXicI'
+SECRET_KEY = 'lvFqzaXsQy76x-KruxGSkiXNs305PUMc00e7ZPnXicI'
