@@ -4,12 +4,12 @@ from data.users import User
 from data.news import News
 from data.db_session import global_init, create_session
 from forms.user import RegisterForm, LoginForm
-from news_api import NewsAggregator  # Правильный импорт
-import logging  # Добавьте в начало файлов
-
+from news_api import NewsAggregator
+import logging
+from config import SECRET_KEY
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your_secret_key_here'
+app.config['SECRET_KEY'] = SECRET_KEY
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 logger = logging.getLogger(__name__)
