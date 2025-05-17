@@ -48,16 +48,17 @@ class NewsAggregator:
         try:
             for article in data.get('articles', []):
                 url_hash = hashlib.md5(article['url'].encode()).hexdigest()
-
-                news = News(
-                    title=article['title'][:255],
-                    content=article['description'] or article['content'] or 'Нет описания',
-                    source='NewsAPI',
-                    tags=article.get('category', 'general'),
-                    published_at=datetime.strptime(article['publishedAt'], '%Y-%m-%dT%H:%M:%SZ'),
-                    api_id=url_hash
-                )
-                db_sess.merge(news)
+                query = db_sess.query(News).filter(News.api_id == url_hash)
+                if not query:
+                    news = News(
+                        title=article['title'][:255],
+                        content=article['description'] or article['content'] or 'Нет описания',
+                        source='NewsAPI',
+                        tags=article.get('category', 'general'),
+                        published_at=datetime.strptime(article['publishedAt'], '%Y-%m-%dT%H:%M:%SZ'),
+                        api_id=url_hash
+                    )
+                    db_sess.merge(news)
             db_sess.commit()
         except Exception as e:
             logger.error(f"Ошибка обработки NewsAPI: {str(e)}")
@@ -105,8 +106,7 @@ class NewsAggregator:
                             result['webPublicationDate'],
                             '%Y-%m-%dT%H:%M:%SZ'
                         ),
-                        api_id=api_id,
-                        url=f"https://www.theguardian.com/{guardian_id}"
+                        api_id=api_id
                     )
                     db_sess.merge(news)
                 except KeyError as e:
